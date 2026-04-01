@@ -17,21 +17,26 @@ function drawFrame(posX, posY, canvasX, canvasY){
 }
 
 const images = [0, 1, 2, 3, 4, 5, 6];
+const states = ["idle", "jump", "walk", "damage", "rolling"];
 let indexImage = 0;
 let counter = 0;
 let currentDirection = 0;
 
+console.log("Current Direction: " + currentDirection);
+
 function nextAnimation(){
     currentDirection++;
     
-    console.log("Index Image: " + indexImage);
     console.log("Current Direction: " + currentDirection);
 }
+
 function previousAnimation(){
-    if (currentDirection > 0){
+    if (currentDirection > 0 && currentDirection !== 3){
         currentDirection--;
         
-        console.log("Index Image: " + indexImage);
+        console.log("Current Direction: " + currentDirection);
+    } else if(currentDirection === 3){
+        currentDirection = 0;
         console.log("Current Direction: " + currentDirection);
     }
 }
@@ -53,11 +58,12 @@ function step(){
 
         if (currentDirection === 5){
             currentDirection++;
+            console.log("Skip to direction: " + currentDirection);
         }
 
         if (currentDirection === 1){
             currentDirection = 3;
-            console.log("Pulou para a direção " + currentDirection);
+            console.log("Skip to direction: " + currentDirection);
         }
 
         if (currentDirection > 6){
