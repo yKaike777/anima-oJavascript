@@ -12,8 +12,21 @@ const height = 92;
 const scaledWidth = scale * width;
 const scaledHeight = scale * height;
 
+let isFacingLeft = false;
+
 function drawFrame(posX, posY, canvasX, canvasY){
-    context.drawImage(img, posX * width, posY * height, width, height, canvasX, canvasY, scaledWidth, scaledHeight);
+    context.save();
+
+    if (isFacingLeft) {
+        context.translate(canvasX + scaledWidth, canvasY);
+        context.scale(-1, 1);
+        context.drawImage(img, posX * width, posY * height, width, height, 10, 30, scaledWidth, scaledHeight);
+    } else {
+        context.translate(canvasX, canvasY);
+        context.drawImage(img, posX * width, posY * height, width, height, 10, 30, scaledWidth, scaledHeight);
+    }
+
+    context.restore();
 }
 
 const images = [0, 1, 2, 3, 4, 5, 6];
@@ -29,6 +42,46 @@ function nextAnimation(){
     
     console.log("Current Direction: " + currentDirection);
 }
+
+// IR PRA DIREITA
+document.addEventListener('keydown', (e) => {
+    if(e.key === "d"){
+        isFacingLeft = false;
+        currentDirection = 3;
+        console.log("Current Direction: " + currentDirection + ", facing left: " + isFacingLeft);
+    }
+});
+
+document.addEventListener('keyup', (e) => {
+    if(e.key === "d"){
+        currentDirection = 0;
+        console.log("Current Direction: " + currentDirection + ", facing left: " + isFacingLeft);
+    }
+})
+
+// IR PRA ESQUERDA
+document.addEventListener('keydown', (e) => {
+    if(e.key === "a"){
+        isFacingLeft = true;
+        currentDirection = 3;
+        console.log("Current Direction: " + currentDirection + ", facing left: " + isFacingLeft);
+    }
+})
+
+document.addEventListener('keyup', (e) => {
+    if(e.key === "a"){
+        currentDirection = 0;
+        console.log("Current Direction: " + currentDirection + ", facing left: " + isFacingLeft);
+    }
+})
+
+// PULAR
+document.addEventListener('keypress', (e) => {
+    if(e.key === " " || e.key === "w"){
+        currentDirection = 1;
+        console.log("Current Direction: " + currentDirection);
+    }
+})
 
 function previousAnimation(){
     if (currentDirection > 0 && currentDirection !== 3){
@@ -62,8 +115,15 @@ function step(){
         }
 
         if (currentDirection === 1){
-            currentDirection = 3;
+            currentDirection = 2;
             console.log("Skip to direction: " + currentDirection);
+        }
+
+        if (currentDirection === 2){
+            setTimeout(() => {
+                currentDirection = 0;
+                console.log("Skip to direction: " + currentDirection);
+            }, 250)
         }
 
         if (currentDirection > 6){
